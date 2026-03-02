@@ -1,0 +1,389 @@
+---
+title: "Projekt:Siguria dhe rendesia e blerjeve online."
+author: "Juna Zyriqi,Elja Asllani"
+date: "2025-05-07"
+output: html_document
+---
+
+Qëllimi i Projektit:
+
+Ky projekt synon të analizojë përvojat e konsumatorëve  lidhur me blerjet online, duke u fokusuar në:
+•	Frekuencën dhe shpenzimet mesatare në blerjet online.
+•	Kohën e nevojshme për të kryer një blerje online.
+•	Kënaqësinë ndaj shpejtësisë së dërgesave dhe vonesat e dorëzimit.
+•	Problemet e hasura gjatë blerjeve online.
+•	Vlerësimin e tregut të blerjeve online në Shqipëri.
+•	Ndikimin e rishikimeve dhe komenteve të klientëve në vendimmarrjen për blerje.
+
+
+Arsyetimi
+
+Me rritjen e përdorimit të internetit dhe zhvillimin e platformave online në Shqipëri, është e rëndësishme të kuptohen sfidat dhe përvojat e konsumatorëve gjatë blerjeve online. Ky studim synon të identifikojë faktorët që ndikojnë në kënaqësinë dhe besimin e konsumatorëve, si dhe të ofrojë rekomandime për përmirësimin e përvojës së blerjes online.
+Objektivat:
+•	Të analizohen të dhënat e mbledhura nga pyetësori për të identifikuar tendencat dhe sfidat kryesore në blerjet online.
+•	Të krijohen lloje te ndryshme grafikesh bazuar ne te dhenat e marra nga pyetesori.
+•	Te analizohet me detaje secili grafik per te nxjerre perfundime dhe per te kuptuar sjelljet e konsumatoreve gjate blerjeve online.
+•	Analiza statistikore e të dhënave për të zbuluar prirje dhe lidhje mes variablave.
+
+```{r include=FALSE}
+library(tidyverse)
+library(readr)
+library(ggplot2)
+library(dplyr)
+
+```
+
+```{r}
+BlerjetProjekt <- read.csv("BlerjetProjekt.csv")
+```
+
+```{r}
+
+blerje=BlerjetProjekt$blerje
+blerje
+```
+Ky rresht e merr kolonën blerje nga të dhënat e lexuara nga CSV (BlerjetProjekt) dhe e ruan ate si nje vektor me emrin blerje. Kjo kolone perfaqeson numrin e artikujve te blere per secilin rast.
+
+```{r}
+summary(blerje)
+```
+
+Kjo komande jep nje permbledhje statistikore te kolones blerje:
+
+•	Min.: 1 – Numri me i vogel i artikujve te blere ne nje rast eshte 1.
+•	1st Qu.: 1 – 25% e rasteve kane vetem 1 blerje.
+•	Mesorja: 1 – Gjysma e rasteve kane bere 1 blerje ose me pak.
+•	Mean: 2.032 – Mesatarisht jane realizuar rreth 2 blerje per rast.
+•	3rd Qu.: 3 – 75% e rasteve kane 3 blerje ose me pak.
+•	Max.: 6 – Numri maksimal i blerjeve te regjistruara ne nje rast eshte 6.
+
+
+```{r}
+
+
+# Krijimi i Density Plot për 'blerje'
+ggplot(BlerjetProjekt, aes(x = blerje)) +
+  geom_density(fill = "skyblue", color = "black", alpha = 0.6) +
+  theme_minimal() +
+  labs(title = "Density Plot i Blerjeve", x = "Vlera e Blerjes", y = "Dendësia")
+```
+Grafiku ka dy kulme , qe do te thote se ka dy grupe dominuese te pjesemarresve me frekuenca te ndryshme blerjesh.Kulmi i pare eshte rreth vlerës 1, qe tregon se nje pjese e madhe e pjesmarresve bejne blerje te rralla. Kulmi i dyte eshte rreth vleres 3|4, qe tregon nje grup te intervistuarish qe ka bere blerje me te shpeshta.Nga grafiku dalim ne perfundimin se dendesia me e larte e blerjeve varion rreth vlerave të vogla qe do te thote se shumica e njerezve bejne blerje online 1 ose 3 here ne muaj,kurse pakica e te intervistuarve jane me aktive dhe me te shpeshte ne blerjet online.
+Ne qofte se shohim boshtin e X-eve pra fundin e grafikut veme re se ne te djathte (blerje = 6), grafiku bie ndjeshem – kjo tregon qe blerjet e shumta jane me te rralla ne kete dataset.
+
+```{r}
+ggplot(BlerjetProjekt, aes(x = blerje)) +
+  geom_histogram(binwidth = 1, fill = "skyblue", color = "black") +
+  theme_minimal() +
+  labs(title = "Histograma e Blerjeve", x = "Vlera e Blerjes", y = "Frekuenca")
+```
+Ketu eshte paraqitur histograma per variablin blerjet.
+
+```{r}
+vlera=BlerjetProjekt$harxhime
+vlera
+```
+Ky rresht e merr kolonen harxhime nga te dhenat dhe e ruan ne nje vektor te quajtur vlera. Kjo kolone perfaqeson shumen e shpenzuar ne çdo blerje te regjistruar.
+
+```{r}
+summary(vlera)
+```
+•	Min.: 10 – Shuma me e vogel e shpenzuar eshte mbi 10 euro.
+•	1st Qu.: 20 – 25% e blerjeve kanr kushtuar deri ne 20 euro.
+•	Mesorja: 20 – Gjysma e blerjeve kane kushtuar 20 ose me pak euro.
+•	Mean: 30.81 – Mesatarisht, nje blerje ka kushtuar rreth 30.81 pra 40 euro.
+•	3rd Qu.: 50 – 75% e rasteve kane nje shpenzim deri ne 50 euro.
+•	Max.: 100 – Vlera me e madhe e shpenzuar per nje blerje eshte 100 euro.
+
+
+```{r}
+ggplot(BlerjetProjekt, aes(x = harxhime)) +
+  geom_histogram(binwidth = 10, fill = "skyblue", color = "black") +
+  theme_minimal() +
+  labs(title = "Histograma e Harxhimeve", x = "Harxhime", y = "Frekuenca")
+
+vlera <- ggplot(BlerjetProjekt, aes(y = harxhime)) +
+  geom_boxplot(fill = "skyblue", color = "black", outlier.shape = 16, outlier.colour = "red") + 
+  labs(title = "Boxplot i Harxhimeve", y = "Harxhime") +
+  theme_minimal() +
+  theme(axis.title.x = element_blank()) 
+
+print(vlera)
+```
+Nga analiza e histogrames dhe boxplot-it mbi pyetjen sa para haxhoni mesatarisht gjate blerjeve online, rezulton se pjesa me e madhe e te anketuarve priren te bejne harxhime te pakta, duke u perqendruar rreth vleres 20-50 € kurse harxhimet me vlere te larte jane te rralla.Numri i atyre qe shpenzojnë 100 € eshte shume I vogel, dhe kjo reflektohet ne fundin e grafikut ku frekuenca bie ndjeshem.Te dhenat tregojne se pjesa me e madhe e te intervistuarve shpenzojne relativisht pak ne blerje online, kryesisht rreth vleres 20 €. Nderkohe, nje pjese tjeter e konsiderueshme shpenzon me shume, rreth 50 €, duke perfaqesuar nje grup me aktiv te konsumatoreve. Vetem nje numer shume i vogel ka shpenzime shume te larta si 100 euro. Pas kesaj analize se histograms dhe boxplot dalim ne perfundimin se, ndonese blerjet online jane te perhapura, shumica e njerezve preferojne te bejne blerje ne vlera mesatare.
+
+```{r}
+grafiku1 = ggplot(BlerjetProjekt, aes(x = blerje, y = harxhime)) +
+  geom_point(color = "skyblue", size = 2.5) +  
+  geom_smooth(method = "lm", se = FALSE, color = "red", linewidth = 1) + 
+  labs(title = "Lidhja midis Blerjeve dhe Harxhimeve",
+       x = "Blerje", y = "Harxhime") +
+  theme_minimal()
+
+grafiku1
+
+```
+Ky eshte nje grafik shperndarjeje me nje vije lineare me qellimin per te pare nese ka ndonje lidhje midis numrit te blerjeve dhe shumes se harxhimeve.Vija e kuqe tregon nje trend rrites te lehte, pra: kur rriten blerjet, ka tendence qe te rriten edhe harxhimet, megjithese jo shume fort.Piket jane te vendosura ne menyre te shperndare (jo afer pas vijes lineare), gje qe tregon nje korrelacion te dobet pozitiv.Si perfundim ekziston nje lidhje pozitive por e dobet midis blerjeve dhe harxhimeve.Kjo tregon se blerjet nuk jane faktori i vetem qe ndikon ne harxhime –ka faktore te tjere si mungesa e informacionit,cmimet e dergesave etj te cilat jane permendur ne grafiket me poshte.
+
+
+```{r}
+kohe=BlerjetProjekt$kohe
+kohe
+```
+Ky rresht merr kolonen kohe nga te dhenat dhe e ruan ne nje vektor te quajtur kohe. Kjo kolone paraqet se sa kohe I duhet perdorusit te kryeje nje blerje online
+
+```{r}
+summary(kohe)
+```
+•	Min.: 1 –Pakicave e bleresve shpenzojne 1 ore kohe per blerje online. .
+•	1st Qu.: 1 – 25% e blerjeve behen per 1 ore .
+•	Mesorja: 2 – Gjysma e blerjeve ndodh per 2 ore ose me heret.
+•	Mean: 1.839 – Mesatarisht,shumica e bleresve duan 2 ore kohe te vendosin per blerjet.
+•	3rd Qu.: 2 – 75% e blerjeve ndodhin per 2 ore ose me heret.
+•	Max.: 3 – Koha me e gjate e regjistruar per nje blerje online.
+
+
+
+```{r}
+ggplot(BlerjetProjekt, aes(x = kohe)) +
+  geom_density(fill = "skyblue", color = "black", alpha = 0.6) +
+  theme_minimal() +
+  labs(title = "Density Plot i kohezgjatjes per blerje", x = "koha ne ore", y = "Dendësia")
+```
+Ky eshte nje grafik dendesie qe paraqet shperndarjen e kohezgjatjes se blerjeve ne ore.Per pyetjen Sa kohe te merr te besh nje blerje online, perfshire kerkimin dhe vendimin perfundimi I grafikut eshte :
+Grafiku ka dy kulme: Nje kulm rreth 1.0 ore (blerje me te shkurtra) dhe nje kulm i dyte me i madh rreth 2.0 ore (blerje me te gjata, me te zakonshme).Pas ores 2.5, dendesia fillon te bjere ndjeshem pra blerjet qe zgjasin shume jane me te rralla, pra kjo tregon se koha mesatare e blerjes eshte rreth 2 ore, pasi aty eshte kulmi me i larte.Si perfundim shumica e blerjeve zgjasin rreth 2 ore, duke sugjeruar se klientet kalojne nje kohe te konsiderueshme per blerjet
+
+
+
+```{r}
+vleresimi=BlerjetProjekt$vleresimiDergeses
+vleresimi
+```
+Ky rresht nxjerr kolonen vleresimiDergeses nga dataseti BlerjetProjekt dhe e ruan ate ne nje vektor te quajtur vleresimi. Kjo kolone perfaqeson vleresimet qe perdoruesit i kane dhene dergeses se nje blerjeje (me vlerëe1 deri ne 4). Kjo analize shërben per te kuptuar a jane klientet te kenaqur apo jo.
+
+```{r}
+summary(vleresimi)
+```
+Kjo komande jep nje permbledhje statistikore te vleresimeve:
+•	Min. (Minimumi): Vlera me e vogel. Disa njerez jane shume te pakenaqur.
+•	1st Qu. (Kuartili i pare): 25% e te dhenave janë ≤ 3. Tregon se nje pjese e madhe e perdoruesve jane te kenaqur.
+•	Median (Mesorja): 3. Do te thote qe gjysma e vleresimeve jane ≤ 3 dhe gjysma ≥ 3.
+•	Mean (Mesatarja): 3.226. Tregon nivelin mesatar te kenaqesise nga blerjet— eshte mbi 3, pra pergjithesisht pozitive.
+•	3rd Qu. (Kuartili i trete): 4. 75% e përdoruesve kane dhene vleresim ≤ 4.
+•	Max. (Maksimumi): Vlera me e larte e vleresimit eshte 4.
+
+
+```{r}
+
+
+library(ggplot2)
+
+# Krijimi i Density Plot për 'vleresimiDergeses'
+grafiku_vleresimi = ggplot(BlerjetProjekt, aes(x = vleresimiDergeses)) +
+  geom_density(fill = "skyblue", color = "black", alpha = 0.6) +
+  labs(
+    title = "Density Plot për Vlerësimin e Dërgesës",
+    x = "Vlerësimi i Dërgesës",
+    y = "Dendësia"
+  ) +
+  theme_minimal()
+
+grafiku_vleresimi
+
+```
+Ky grafik perfaqeson shperndarjen e vleresimeve qe perdoruesit i japin sherbimit te dergeses pra sa te kenaqur jane konsumatoret me shpejtesine e dergesave per blerjet qe ben online me shkalle nga 1 deri ne 5.Kjo ndihmon të kuptohet si është perceptuar cilësia e shërbimit.Grafiku ka nje pike kulmore rreth vleresimit 3, qe tregon se shumica e perdoruesve kanë dhene nje vleresim te mesem.Dallohen edhe dy rritje te tjera: nje afer 2 dhe nje tjeter rreth 4.Kjo mund te sugjeroje qe ka tre grupe përdoruesish: disa te pakënaqur, disa neutrale dhe disa shumë te kenaqur.Vleresimet me te uleta jane shume me te pakta, qe eshte pozitive per sherbimin.Pra si perfundim shumica e perdoruesve kane dhene vleresime te larta (3 ose 4),kjo tregon kenaqesi te pergjithshme me dergesen.
+
+```{r}
+
+vonesa = BlerjetProjekt[["vonesa.dite"]]
+vonesa
+```
+
+Ky rresht merr kolonen vonesa.dite nga te dhenat dhe e ruan ne nje vektor te quajtur vonesa. Kjo fushe tregon sa dite eshte vonuar dergesa.
+
+
+```{r}
+summary(vonesa)
+```
+Jep permbledhje statistikore per vonesat:
+
+•	Min. (Minimumi): 2 dite – dergesa me e shpejte.
+•	1st Qu. (Kuartili i pare): 3 dite – 25% e dergesave jane dorezuar per ≤ 3 dite.
+•	Median (Mesorja): 3 dite – gjysma e dergesave jane dorezuar  per≤ 3 dite.
+•	Mean (Mesatarja): 3.113 dite – mesatarja e voneses se dergesave eshte rreth 3 dite.
+•	3rd Qu. (Kuartili i trete): 3 dite – 75% e dergesave perfundojne per ≤ 3 dite.
+•	Max. (Maksimumi): 6 dite – dergesa me e vonuar.
+
+```{r}
+
+# Krijimi i histogramës për variablën 'vonesa/dite'
+ggplot(BlerjetProjekt, aes(x = `vonesa.dite`)) +
+  geom_histogram(binwidth = 1, fill = "skyblue", color = "black", boundary = 0) +
+  theme_minimal() +
+  labs(
+    title = "Histogrami i Vonesës për Ditë",
+    x = "Vonesa për Ditë",
+    y = "Frekuenca"
+  )
+
+```
+Mbi pyetjen Sa ju vonon zakonisht dorezimi i porosise analiza e grafikut eshte kjo :
+Ky grafik tregon shperndarjen e vonesave ne dite per nje sherbim te caktuar.Boshti horizontal: tregon numrin e diteve te voneses, Boshti vertikalisht: tregon sa here ka ndodhur kjo vonese(frekuenca e voneses).Vonesat prej 2 ditesh jane me te zakonshmet, me mbi 45 raste.Vonesat prej 3 dhe 4 ditesh jane me te rralla,kurse 5-6 dite vonese jane shume me te rralla pothuajse konsumatoret nuk kane pasur shpesh raste vonesash per porosite e tyre mbi 5 dite..Kjo tregon qe, ne pergjithesi, sherbimi eshte mjaft i shpejte, por ka raste te rralla qe vonesat shkojne me gjate.Kjo tregon qe vonesa eshte e pranishme por zakonisht e ulet.
+
+
+
+```{r}
+
+
+# Grafik me pika për lidhjen mes 'vleresimiDergeses' dhe 'vonesa/dite'
+ggplot(BlerjetProjekt, aes(x = `vleresimiDergeses`, y = `vonesa.dite`)) +
+  geom_point(color = "blue", size = 3, alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  theme_minimal() +
+  labs(
+    title = "Lidhja midis Vlerësimit të Dërgesës dhe Vonesës për Ditë",
+    x = "Vlerësimi i Dërgesës",
+    y = "Vonesa për Ditë"
+  )
+```
+Ky grafik tregon lidhjen midis Vleresimit te Dergeses dhe Voneses per Dite: 
+Boshti I X-eve: tregon Vleresimin e Dergeses nga konusmatori (nga 1 deri në 4)
+Boshti I Y: tregon Vonesen ne Dite te dergeses.
+Vija e kuqe tregon nje grafik linear me nje pjerresi te lehte negative.Pra sa me i larte vleresimi per dergesen, aq me e vogel eshte prirja per vonese ne dite. Kjo nenkupton qe perdoruesit qe kane pasur me pak vonesa ne dorezim, jan te prirur te japin vleresime me te larta per dergesen. Ne pergjithesi, kur vleresimi i dergeses rritet, vonesa mesatare per dite pakesohet. Pra, ekziston nje prirje qe tregon se vonesa lidhet negativisht me vleresimin.Pikat blu jane te shperndara ne menyre jo te rregullt rreth vijes se kuqe.Kjo do te thote qe nuk ka nje lidhje te forte mes vleresimit te dergeses dhe voneses.Pra, lidhja mes ketyre dy variablave eshte e dobet, dhe faktore te tjere mund te ndikojne vleresimin perveç voneses.
+
+```{r}
+probleme=BlerjetProjekt$Problemet
+probleme
+```
+
+```{r}
+table(probleme)
+```
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Llogaritja e frekuencave dhe përqindjeve për Problemet
+problemet_data <- BlerjetProjekt %>%
+  group_by(Problemet) %>%
+  summarise(Nr = n()) %>%
+  mutate(Perqindje = round(Nr / sum(Nr) * 100, 1),
+         Label = paste0(Perqindje, "%"))  # Vetëm përqindjet
+
+# Krijimi i Pie Chart për Problemet me përqindje jashtë
+ggplot(problemet_data, aes(x = "", y = Nr, fill = factor(Problemet))) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar(theta = "y") +
+  theme_void() +
+  geom_text(aes(label = Label), 
+            position = position_stack(vjust = 0.5),
+            color = "black", 
+            size = 4, 
+            hjust = -0.3) +  # Vendosja e përqindjeve jashtë
+  labs(
+    title = "Përqindjet e Problemeve",
+    fill = "Problemet"
+  )
+
+```
+Ky eshte nje pie chart qe shfaq shperndarjen ne perqindje te problemeve qe kane hasur perdoruesit. Ai nxjerr ne pah problemet kryesore qe perjetojne përdoruesit ne blerjet online. Problemet financiare (çmimi i dergeses) dhe cilesia e produktit dhe dorezimi dominojnë.Çdo pjesë e grafikut perfaqeson nje problem te ndryshem qe eshte bazuar nga dataseti.Problemi kryesor: Gati gjysma e te anketuarve (46.8%) kanë raportuar qe çmimet e larta per dergesa jane shqetesimi kryesor. Kjo tregon qe kostot e transportit jane nje problem I madh per konsumatoret. Problemet me cilesine e produkteve (25.8%) dhe dorezimin (11.3%) jane gjithashtu ne nje numer me te larte se problemet e tjera dhe tregojne shqetesime serioze per sherbimet e ofruara.Problemet si informacioni i paqarte, produktet qe nuk perputhen, dhe faqet jo te besueshme jane me pak te përmendura, por gjithsesi te rendesishme per besimin e konsumatoreve. 
+
+
+```{r}
+vleresimi=BlerjetProjekt$vleresimitTregut
+vleresimi
+```
+
+```{r}
+table(vleresimi)
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Llogaritja e frekuencave dhe përqindjeve për vleresimitTregut
+vleresimitTregut_data <- BlerjetProjekt %>%
+  group_by(vleresimitTregut) %>%
+  summarise(Nr = n()) %>%
+  mutate(Perqindje = round(Nr / sum(Nr) * 100, 1),
+         Label = paste0(Perqindje, "%"))  # Vetëm përqindjet
+
+# Krijimi i Pie Chart me vetëm përqindje
+ggplot(vleresimitTregut_data, aes(x = "", y = Nr, fill = factor(vleresimitTregut))) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar(theta = "y") +
+  theme_void() +
+  geom_text(aes(label = Label), 
+            position = position_stack(vjust = 0.5), 
+            color = "white", 
+            size = 4) +
+  labs(
+    title = "Përqindjet e Vlerësimit të Tregut",
+    fill = "Vlerësimi i Tregut"
+  )
+
+
+
+```
+Ky eshte nje grafik rrethor qe tregon se si jane shperndare pergjigjet e te anketuarve lidhur se si ndikojne rishikimet dhe komentet e klienteve ne vendimin e tyre per te blere nje produkt.
+Shumica e njerezve (85.4%) mendojne se komentet jane te rendesishme kurse vetem 14.5% e injorojne ose nuk i konsiderojne shume te rendesishme, dhe disa konsumatore pra pakica nuk i lexojne komentet fare. Nga te dhenat dalim ne perfundimin se review jan te rendesishme per shumicen e konsumatoreve por jo se jane vendimtare ne blerjen ose jo te produktit.
+
+```{r}
+komente=BlerjetProjekt$komentet
+komente
+```
+
+```{r}
+table(komente)
+```
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Llogaritja e frekuencave dhe përqindjeve për Komentet
+komentet_data <- BlerjetProjekt %>%
+  group_by(komentet) %>%
+  summarise(Nr = n()) %>%
+  mutate(Perqindje = round(Nr / sum(Nr) * 100, 1),
+         Label = paste0(Perqindje, "%"),
+         komentet = tolower(komentet))  # Shkronjat e vogla
+
+# Krijimi i Pie Chart për Komentet me përqindje jashtë
+ggplot(komentet_data, aes(x = "", y = Nr, fill = factor(komentet))) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar(theta = "y") +
+  theme_void() +
+  geom_text(aes(label = Label), 
+            position = position_stack(vjust = 0.5),
+            color = "black", 
+            size = 4, 
+            hjust = -0.3) +  # Vendosja e përqindjeve jashtë
+  labs(
+    title = "Përqindjet e Komentet",
+    fill = "Komentet"
+  )
+
+
+```
+Ky grafik tregon menyren se si konsumatoret vleresojne pervojen e tyre me tregun e blerjeve online.
+Me shume se gjysma e te anketuarve (53.2%) e shohin tregun online si te pasigurt dhe me mungese besueshmerie.Vetem 17.7% kane nje pervoje pozitive.Ka edhe nje perqindje qe përballen me probleme në transport (9.7%) dhe pasiguri (3.2%).Mungesa e faqeve te sigurta dhe te besueshme eshte shqetesimi kryesor.Duhen marre masa nga dyqanet online per te rritur besimin e konsumatoreve, qe te rritet dhe numri I blerjeve nga konsumatoret.
+
+
+
+Perfundimi 
+
+Pas analizimit të të dhënave të mbledhura nga anketa, ku morën pjesë 64 persona, arritëm në disa përfundime të rëndësishme mbi përvojat dhe qëndrimet e konsumatorëve lidhur me blerjet online:
+•	Kuptuam që komunikimi dhe transparenca janë thelbësore për të krijuar besim në tregun online.
+•	Identifikuam problemet kryesore që konsumatorët përjetojnë, te cilat jane problematike.
+•	Dhamë një pamje reale të perceptimeve dhe nevojave të konsumatorit për blerjet online në ditët e sotme.
+
+
+
+
+
+
+
+
+
